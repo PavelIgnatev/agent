@@ -68,8 +68,8 @@ def save_user_data(user_data, file_path):
 async def main(chat_urls_or_usernames, file_path):
     user_data = {"chats": {}, "accounts": {}}
     try:
-        print('dasdsadsa')
         async with TelegramClient(session_name, api_id, api_hash) as client:
+            print(client)
             for chat_url_or_username in chat_urls_or_usernames:
                 try:
                     chat = await client.get_entity(chat_url_or_username)
