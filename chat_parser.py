@@ -17,7 +17,7 @@ args = parser.parse_args()
 
 api_id = 21545783
 api_hash = "389839339699f6a919ac6ead583df8fa"
-session_name = "app/session.session"
+session_name = "session.session"
 queryKey = [
     "а",
     "б",
@@ -175,7 +175,7 @@ async def main(chat_urls_or_usernames, file_path):
                 try:
                     total_messages = (await client.get_messages(chat, 1)).total
                 except Exception as e:
-                    logger.error(
+                    logger.info(
                         f"Произошла ошибка при получении сообщений в чате: {chat.title}, {e}"
                     )
                     continue
@@ -284,7 +284,7 @@ async def main(chat_urls_or_usernames, file_path):
                                     chat_url_or_username
                                 ].append(message.text)
     except Exception as e:
-        logger.error(f"Произошла глобальная ошибка. {e}")
+        logger.info(f"Произошла глобальная ошибка. {e}")
 
     save_user_data(user_data, file_path)
 
