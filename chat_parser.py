@@ -17,7 +17,7 @@ args = parser.parse_args()
 
 api_id = 21545783
 api_hash = "389839339699f6a919ac6ead583df8fa"
-session_name = "./session.session"
+session_name = "app/session.session"
 queryKey = [
     "а",
     "б",
@@ -147,9 +147,7 @@ def save_user_data(user_data, file_path):
 async def main(chat_urls_or_usernames, file_path):
     user_data = {"chats": {}, "accounts": {}}
     try:
-        print(TelegramClient, session_name, api_id, api_hash)
         async with TelegramClient(session_name, api_id, api_hash) as client:
-            print(client)
             for chat_url_or_username in chat_urls_or_usernames:
                 try:
                     chat = await client.get_entity(chat_url_or_username)
