@@ -294,5 +294,4 @@ os.makedirs(json_folder, exist_ok=True)
 file_path = os.path.join(json_folder, f"result.json")
 print(args.urls)
 chat_urls_or_usernames = args.urls
-print(chat_urls_or_usernames, file_path)
 asyncio.run(main(chat_urls_or_usernames, file_path))
