@@ -152,12 +152,12 @@ async def main(chat_urls_or_usernames, file_path):
                 try:
                     chat = await client.get_entity(chat_url_or_username)
                     if not chat.megagroup:
-                        logger.error(
+                        logger.info(
                             f"Чат {chat_url_or_username} не распаршен, он не является мегагруппой"
                         )
                         continue
                 except Exception as e:
-                    logger.error(
+                    logger.info(
                         f"Чат {chat_url_or_username} не распаршен, произошла ошибка. {e}"
                     )
                     continue
