@@ -7,6 +7,14 @@ import datetime
 from telethon.tl.types import User, Chat, Channel
 from telethon.errors import ChatAdminRequiredError
 import os
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--urls', nargs='+', type=str)
+args = parser.parse_args()
+
+# Разбираем командную строку
+args = parser.parse_args()
 
 api_id = 21545783
 api_hash = '389839339699f6a919ac6ead583df8fa'
@@ -158,6 +166,6 @@ async def main(chat_urls_or_usernames, file_path):
 json_folder = "result"
 os.makedirs(json_folder, exist_ok=True)
 file_path = os.path.join(json_folder, f"result.json")
-chat_urls_or_usernames = []
+chat_urls_or_usernames = args.urls
 
 asyncio.run(main(chat_urls_or_usernames, file_path))
