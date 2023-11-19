@@ -17,7 +17,7 @@ args = parser.parse_args()
 
 api_id = 21545783
 api_hash = "389839339699f6a919ac6ead583df8fa"
-session_name = "session.session"
+session_name = "session2.session"
 queryKey = [
     "а",
     "б",
