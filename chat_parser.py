@@ -135,8 +135,9 @@ def serialize_participant(participant):
 def send_request_to_server(user_data):
     print(user_data)
     server_url = "http://localhost:7777/agents/{args.name}/save"
+    json = {"jsonData": user_data}
     try:
-        response = requests.post(server_url, jsonData=user_data)
+        response = requests.post(server_url, json=json)
         response.raise_for_status()
         logger.info(
             f"Запрос успешно отправлен на сервер. Код ответа: {response.status_code}"
