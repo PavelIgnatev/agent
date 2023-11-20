@@ -146,7 +146,7 @@ def send_request_to_server(user_data):
         logger.error(f"Ошибка при отправке запроса на сервер: {e}")
 
 
-async def main(chat_urls_or_usernames, file_path):
+async def main(chat_urls_or_usernames):
     user_data = {"chats": {}, "accounts": {}}
     try:
         async with TelegramClient(session_name, api_id, api_hash) as client:
