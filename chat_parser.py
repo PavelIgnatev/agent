@@ -1,11 +1,9 @@
 # скрипт для парсингов чатов (пользователей и сообщений)
 import logging
 import asyncio
-import json
 from telethon import TelegramClient
 import datetime
 from telethon.tl.types import Channel
-import os
 import argparse
 import requests
 
@@ -136,23 +134,10 @@ def serialize_participant(participant):
     }
 
 
-def save_user_data(user_data, file_path):
-    with open(file_path, "w") as file:
-        json.dump(user_data, file, ensure_ascii=False, indent=4)
-    logger.info("Данные успешно сохранены в файл.")
-    logger.info(
-        "-------------------------------------------------------------------------------"
-    )
-
-
-def send_request_to_server(file_path):
-    # Формируем URL для запроса
-    server_url = "http://localhost:7777/agents/your_agent_name/save"  # Замените "your_agent_name" на фактическое имя вашего агента
-    files = {"file": open(file_path, "rb")}
-
-    # Отправляем POST-запрос на сервер
+def send_request_to_server(user_data):
+    server_url = "http://localhost:7777/agents/your_agent_name/save"
     try:
-        response = requests.post(server_url, files=files)
+        response = requests.post(server_url, jsonData=user_data)
         response.raise_for_status()
         logger.info(
             f"Запрос успешно отправлен на сервер. Код ответа: {response.status_code}"
@@ -303,15 +288,11 @@ async def main(chat_urls_or_usernames, file_path):
     except Exception as e:
         logger.error(f"Произошла глобальная ошибка. {e}")
 
-    save_user_data(user_data, file_path)
     print("делаю запрос")
-    send_request_to_server(file_path)
+    send_request_to_server(user_data)
     print("сделал запрос")
 
 
-json_folder = "result"
-os.makedirs(json_folder, exist_ok=True)
-file_path = os.path.join(json_folder, f"result.json")
 print(args.urls)
 chat_urls_or_usernames = args.urls
-asyncio.run(main(chat_urls_or_usernames, file_path))
+asyncio.run(main(chat_urls_or_usernames))
