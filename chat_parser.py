@@ -253,6 +253,7 @@ async def main(chat_urls_or_usernames):
                     total_participants += len(participants)
 
                     for participant in participants:
+                        print(participant)
                         processed_participants += 1
                         logger.info(
                             f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Обработка участника {processed_participants}/{total_participants}"
@@ -361,6 +362,7 @@ async def main(chat_urls_or_usernames):
         start_index = batch_index * batch_size
         end_index = min(start_index + batch_size, num_accounts)
         account_batch = accounts[start_index:end_index]
+
 
         proxy_url = f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@{args.hostIp}:9050"
         connector = ProxyConnector.from_url(proxy_url)
