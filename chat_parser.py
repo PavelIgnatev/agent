@@ -12,8 +12,6 @@ parser.add_argument("--urls", nargs="+", type=str)
 parser.add_argument("--name", type=str)
 args = parser.parse_args()
 
-print(args)
-
 api_id = 21545783
 api_hash = "389839339699f6a919ac6ead583df8fa"
 session_name = "app/session.session"
@@ -135,7 +133,8 @@ def serialize_participant(participant):
 
 
 def send_request_to_server(user_data):
-    server_url = "http://localhost:7777/agents/your_agent_name/save"
+    print(user_data)
+    server_url = "http://localhost:7777/agents/{args.name}/save"
     try:
         response = requests.post(server_url, jsonData=user_data)
         response.raise_for_status()
