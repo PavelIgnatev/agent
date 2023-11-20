@@ -10,6 +10,8 @@ import requests
 parser = argparse.ArgumentParser()
 parser.add_argument("--urls", nargs="+", type=str)
 parser.add_argument("--name", type=str)
+parser.add_argument("--hostIp", help="Host IP address")
+
 args = parser.parse_args()
 
 api_id = 21545783
@@ -134,7 +136,7 @@ def serialize_participant(participant):
 
 def send_request_to_server(user_data):
     print(user_data)
-    server_url = "http://localhost:7777/agents/{args.name}/save"
+    server_url = "http://${args.hostIp}:7777/agents/{args.name}/save"
     json = {"jsonData": user_data}
     try:
         response = requests.post(server_url, json=json)
