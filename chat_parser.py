@@ -366,7 +366,7 @@ async def main(chat_urls_or_usernames):
         account_batch = accounts[start_index:end_index]
 
         proxy_url = f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@{args.hostIp}:9050"
-        connector = ProxyConnector.from_url(proxy_url)
+        connector = ProxyConnector.from_url(proxy_url, ssl=False)
 
         print(proxy_url)
         print(batch_index, num_batches)
