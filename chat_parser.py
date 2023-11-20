@@ -352,21 +352,21 @@ async def main(chat_urls_or_usernames):
         logger.error(f"Произошла глобальная ошибка. {e}")
 
     accounts = list(user_data["accounts"].keys())
-    print(accounts)
     num_accounts = len(accounts)
     batch_size = 50
     num_batches = (num_accounts + batch_size - 1) // batch_size
-    print
+
     batch_index = 0
     while batch_index < num_batches:
         start_index = batch_index * batch_size
         end_index = min(start_index + batch_size, num_accounts)
         account_batch = accounts[start_index:end_index]
 
-        print(batch_index, num_batches)
         proxy_url = f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@{args.hostIp}:9050"
-        print(proxy_url)
         connector = ProxyConnector.from_url(proxy_url)
+
+        print(proxy_url)
+        print(batch_index, num_batches)
 
         async with aiohttp.ClientSession(connector=connector) as session:
             has_telegram_description = await process_account_batch(
