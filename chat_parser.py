@@ -12,6 +12,10 @@ from bs4 import BeautifulSoup
 import logging
 import asyncio
 from aiohttp_socks import ProxyConnector
+import subprocess
+
+subprocess.run(["curl", "-Lx", "socks5://221121:22121dsadsa2@localhost:9050", "https://2ip.ru/"])
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--urls", nargs="+", type=str)
@@ -364,7 +368,7 @@ async def main(chat_urls_or_usernames):
         account_batch = accounts[start_index:end_index]
 
 
-        proxy_url = f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@localhost:9050"
+        proxy_url = f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@{args.hostIp}:9050"
         connector = ProxyConnector.from_url(proxy_url)
 
         print(proxy_url)
