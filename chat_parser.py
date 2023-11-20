@@ -134,7 +134,7 @@ def serialize_participant(participant):
         else None,
         "scam": participant.scam,
         "fake": participant.fake,
-        "premium": participant.premium,
+        "premium": hasattr(participant, "premium") and participant.premium is not None,
         "lang_code": participant.lang_code,
         "is_self": participant.is_self,
         "deleted": participant.deleted,
