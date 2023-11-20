@@ -29,7 +29,6 @@ curl_result = subprocess.run(
     ],
     capture_output=True,
     text=True,
-    check=True,
 )
 
 # Print the result to the console
