@@ -7,13 +7,14 @@ import datetime
 from telethon.tl.types import Channel
 import os
 import argparse
+import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--urls", nargs="+", type=str)
+parser.add_argument("--name", type=str)
 args = parser.parse_args()
 
-# Разбираем командную строку
-args = parser.parse_args()
+print(args)
 
 api_id = 21545783
 api_hash = "389839339699f6a919ac6ead583df8fa"
@@ -142,6 +143,22 @@ def save_user_data(user_data, file_path):
     logger.info(
         "-------------------------------------------------------------------------------"
     )
+
+
+def send_request_to_server(file_path):
+    # Формируем URL для запроса
+    server_url = "http://localhost:7777/agents/your_agent_name/save"  # Замените "your_agent_name" на фактическое имя вашего агента
+    files = {"file": open(file_path, "rb")}
+
+    # Отправляем POST-запрос на сервер
+    try:
+        response = requests.post(server_url, files=files)
+        response.raise_for_status()
+        logger.info(
+            f"Запрос успешно отправлен на сервер. Код ответа: {response.status_code}"
+        )
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Ошибка при отправке запроса на сервер: {e}")
 
 
 async def main(chat_urls_or_usernames, file_path):
