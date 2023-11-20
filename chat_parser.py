@@ -253,7 +253,6 @@ async def main(chat_urls_or_usernames):
                     total_participants += len(participants)
 
                     for participant in participants:
-                        print(participant)
                         processed_participants += 1
                         logger.info(
                             f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Обработка участника {processed_participants}/{total_participants}"
