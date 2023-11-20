@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--urls", nargs="+", type=str)
 parser.add_argument("--name", type=str)
 parser.add_argument("--hostIp", help="Host IP address")
-
+print(args.hostIp)
 args = parser.parse_args()
 
 api_id = 21545783
