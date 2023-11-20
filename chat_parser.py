@@ -304,6 +304,9 @@ async def main(chat_urls_or_usernames, file_path):
         logger.error(f"Произошла глобальная ошибка. {e}")
 
     save_user_data(user_data, file_path)
+    print("делаю запрос")
+    send_request_to_server(file_path)
+    print("сделал запрос")
 
 
 json_folder = "result"
