@@ -136,7 +136,7 @@ def serialize_participant(participant):
 
 def send_request_to_server(user_data):
     print(user_data)
-    print(args.hostIp, args.name)
+    print(args.hostIp, args.name, "http://${args.hostIp}:7777/agents/{args.name}/save")
     server_url = "http://${args.hostIp}:7777/agents/{args.name}/save"
     json = {"jsonData": user_data}
     try:
