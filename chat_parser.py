@@ -14,8 +14,15 @@ import asyncio
 from aiohttp_socks import ProxyConnector
 import subprocess
 
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--urls", nargs="+", type=str)
+parser.add_argument("--name", type=str)
+parser.add_argument("--hostIp", help="Host IP address")
+
 curl_result = subprocess.run(
-    ["curl", "-Lx", "socks5://221121:22121dsadsa2@localhost:9050", "https://2ip.ru/"],
+    ["curl", "-Lx", "socks5://221121:22121dsadsa2@{args.hostIp}:9050", "https://2ip.ru/"],
     capture_output=True,
     text=True,  # Ensure the output is captured as a text (str)
 )
@@ -23,12 +30,6 @@ curl_result = subprocess.run(
 # Print the result to the console
 print("curl command output:")
 print(curl_result.stdout)
-
-
-# parser = argparse.ArgumentParser()
-# parser.add_argument("--urls", nargs="+", type=str)
-# parser.add_argument("--name", type=str)
-# parser.add_argument("--hostIp", help="Host IP address")
 
 # args = parser.parse_args()
 # print(args.hostIp)
