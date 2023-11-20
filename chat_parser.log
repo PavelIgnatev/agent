@@ -1,0 +1,2 @@
+[2023-11-20 20:19:46,307] [ERROR] Произошла глобальная ошибка. unable to open database file
+[2023-11-20 20:19:46,325] [ERROR] Ошибка при отправке запроса на сервер: HTTPConnectionPool(host='none', port=7777): Max retries exceeded with url: /agents/None/save (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x106a9cd90>: Failed to resolve 'none' ([Errno 8] nodename nor servname provided, or not known)"))
