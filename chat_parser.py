@@ -15,7 +15,6 @@ from aiohttp_socks import ProxyConnector
 import subprocess
 
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--urls", nargs="+", type=str)
 parser.add_argument("--name", type=str)
