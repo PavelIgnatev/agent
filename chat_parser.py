@@ -173,6 +173,10 @@ async def enrich_account_description(session, account_name):
         match = re.search(
             r'<div class="tgme_page_description">(.*?)</div>', html, re.DOTALL
         )
+        match2 = re.search(
+            r'<div class="tgme_page_description ">(.*?)</div>', html, re.DOTALL
+        )
+        print(match.group(1).strip(), match2.group(1).strip())
 
         if match:
             description = match.group(1).strip()
