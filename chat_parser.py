@@ -5,14 +5,8 @@ import datetime
 from telethon.tl.types import Channel
 import argparse
 import requests
-import string
-import aiohttp
-import random
-from bs4 import BeautifulSoup
 import logging
 import asyncio
-from aiohttp_socks import ProxyConnector
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--urls", nargs="+", type=str)
@@ -20,7 +14,6 @@ parser.add_argument("--name", type=str)
 
 
 args = parser.parse_args()
-print(args.hostIp)
 
 api_id = 21545783
 api_hash = "389839339699f6a919ac6ead583df8fa"
