@@ -162,14 +162,14 @@ async def enrich_account_description(session, account_name):
     try:
         async with session.get(f"https://t.me/{account_name}") as response:
             html = await response.text()
+        print(html)
+        # soup = BeautifulSoup(html, "html.parser")
 
-        soup = BeautifulSoup(html, "html.parser")
-
-        description_element = soup.select_one(".tgme_page_description")
-        description = (
-            description_element.get_text(strip=True) if description_element else None
-        )
-
+        # description_element = soup.select_one(".tgme_page_description")
+        # description = (
+        #     description_element.get_text(strip=True) if description_element else None
+        # )
+        description = "pavel"
         if description and "If you haveTelegram, you can" in description:
             return True, description
         else:
@@ -201,7 +201,7 @@ async def process_account_batch(session, account_batch, data):
                 f"Найдено описание пользователя с фразой 'If you haveTelegram, you can': {account_name}"
             )
             consecutive_count += 1
-            if consecutive_count >= 1:
+            if consecutive_count >= 10:
                 return True  # Прерывание цикла итерации аккаунтов
         else:
             consecutive_count = 0  # Сброс счетчика при отсутствии фразы
@@ -353,7 +353,7 @@ async def main(chat_urls_or_usernames):
 
     accounts = list(user_data["accounts"].keys())
     num_accounts = len(accounts)
-    batch_size = 5
+    batch_size = 50
     num_batches = (num_accounts + batch_size - 1) // batch_size
 
     batch_index = 0
