@@ -145,7 +145,7 @@ def serialize_participant(participant):
 
 
 def send_request_to_server(user_data):
-    server_url = f"http://host.docker.internal:7777/agents/{args.name}/save"
+    server_url = f"http://172.17.0.1:7777/agents/{args.name}/save"
     json = {"jsonData": user_data}
     try:
         response = requests.post(server_url, json=json)
@@ -358,7 +358,7 @@ async def main(chat_urls_or_usernames):
         account_batch = accounts[start_index:end_index]
 
         connector = ProxyConnector.from_url(
-            f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@host.docker.internal:9050",
+            f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@172.17.0.1:9050",
             limit=0,
             ssl=False,
         )
