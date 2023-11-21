@@ -136,7 +136,7 @@ def serialize_participant(participant):
 
 
 def send_request_to_server(user_data):
-    server_url = f"http://host.docker.internal:7777/agents/{args.name}/save"
+    server_url = f"http://172.17.0.1:7777/agents/{args.name}/save"
     json = {"jsonData": user_data}
     try:
         response = requests.post(server_url, json=json)
