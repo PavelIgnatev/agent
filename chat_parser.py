@@ -365,7 +365,7 @@ async def main(chat_urls_or_usernames):
         end_index = min(start_index + batch_size, num_accounts)
         account_batch = accounts[start_index:end_index]
 
-        proxy_url = f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@host.docker.internal:9050"
+        proxy_url = f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@{args.hostIp}:9050"
         connector = ProxyConnector.from_url(
             proxy_url,
         )
