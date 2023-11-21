@@ -28,74 +28,74 @@ api_hash = "389839339699f6a919ac6ead583df8fa"
 session_name = "app/session.session"
 queryKey = [
     "а",
-    # "б",
-    # "в",
-    # "г",
-    # "д",
-    # "е",
-    # "ё",
-    # "ж",
-    # "з",
-    # "и",
-    # "й",
-    # "к",
-    # "л",
-    # "м",
-    # "н",
-    # "о",
-    # "п",
-    # "р",
-    # "с",
-    # "т",
-    # "у",
-    # "ф",
-    # "х",
-    # "ц",
-    # "ч",
-    # "ш",
-    # "щ",
-    # "ъ",
-    # "ы",
-    # "ь",
-    # "э",
-    # "ю",
-    # "я",
-    # "a",
-    # "b",
-    # "c",
-    # "d",
-    # "e",
-    # "f",
-    # "g",
-    # "h",
-    # "i",
-    # "j",
-    # "k",
-    # "l",
-    # "m",
-    # "n",
-    # "o",
-    # "p",
-    # "q",
-    # "r",
-    # "s",
-    # "t",
-    # "u",
-    # "v",
-    # "w",
-    # "x",
-    # "y",
-    # "z",
-    # "0",
-    # "1",
-    # "2",
-    # "3",
-    # "4",
-    # "5",
-    # "6",
-    # "7",
-    # "8",
-    # "9",
+    "б",
+    "в",
+    "г",
+    "д",
+    "е",
+    "ё",
+    "ж",
+    "з",
+    "и",
+    "й",
+    "к",
+    "л",
+    "м",
+    "н",
+    "о",
+    "п",
+    "р",
+    "с",
+    "т",
+    "у",
+    "ф",
+    "х",
+    "ц",
+    "ч",
+    "ш",
+    "щ",
+    "ъ",
+    "ы",
+    "ь",
+    "э",
+    "ю",
+    "я",
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
 ]
 
 logging.basicConfig(
@@ -111,11 +111,6 @@ file_handler.setFormatter(
 
 # Добавление обработчика к логгеру
 logger.addHandler(file_handler)
-
-
-def generate_random_string(length):
-    letters = string.ascii_letters
-    return "".join(random.choice(letters) for _ in range(length))
 
 
 def get_username(entity):
@@ -159,57 +154,6 @@ def send_request_to_server(user_data):
         )
     except requests.exceptions.RequestException as e:
         logger.error(f"Ошибка при отправке запроса на сервер: {e}")
-
-
-async def enrich_account_description(session, account_name):
-    try:
-        async with session.get(f"https://t.me/{account_name}") as response:
-            html = await response.text()
-
-        soup = BeautifulSoup(html, "html.parser")
-
-        description_element = soup.select_one(".tgme_page_description")
-        description = (
-            description_element.get_text(strip=True) if description_element else None
-        )
-
-        if description and "If you haveTelegram, you can" in description:
-            return True, description
-        else:
-            return False, description
-
-    except Exception as e:
-        logger.error(f"Ошибка при выполнении запроса для {account_name}: {str(e)}")
-        return True, None
-
-
-async def process_account_batch(session, account_batch, data):
-    tasks = []
-    consecutive_count = 0  # Счетчик последовательных повторений фразы
-    for account_name in account_batch:
-        task = asyncio.create_task(enrich_account_description(session, account_name))
-        tasks.append(task)
-
-    results = await asyncio.gather(*tasks)
-
-    for (has_telegram_description, description), account_name in zip(
-        results, account_batch
-    ):
-        data["accounts"][account_name]["description"] = description
-
-        logger.info(f"Описание пользователя {account_name}: {description}")
-
-        if has_telegram_description:
-            logger.info(
-                f"Найдено описание пользователя с фразой 'If you haveTelegram, you can': {account_name}"
-            )
-            consecutive_count += 1
-            if consecutive_count >= 10:
-                return True  # Прерывание цикла итерации аккаунтов
-        else:
-            consecutive_count = 0  # Сброс счетчика при отсутствии фразы
-
-    return False
 
 
 async def main(chat_urls_or_usernames):
@@ -354,39 +298,6 @@ async def main(chat_urls_or_usernames):
     except Exception as e:
         logger.error(f"Произошла глобальная ошибка. {e}")
 
-    accounts = list(user_data["accounts"].keys())
-    num_accounts = len(accounts)
-    batch_size = 50
-    num_batches = (num_accounts + batch_size - 1) // batch_size
-
-    batch_index = 0
-    while batch_index < num_batches:
-        start_index = batch_index * batch_size
-        end_index = min(start_index + batch_size, num_accounts)
-        account_batch = accounts[start_index:end_index]
-
-        proxy_url = f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@{args.hostIp}:9050"
-        connector = ProxyConnector.from_url(
-            proxy_url,
-        )
-
-        print(proxy_url)
-        print(batch_index, num_batches)
-
-        async with aiohttp.ClientSession(
-            connector=connector, connector_owner=False, trust_env=True
-        ) as session:
-            has_telegram_description = await process_account_batch(
-                session, account_batch, user_data
-            )
-
-            if has_telegram_description:
-                logger.info(
-                    "Одно или несколько описаний содержат фразу 'If you haveTelegram, you can'. "
-                )
-
-            else:
-                batch_index += 1
     print("делаю запрос")
     send_request_to_server(user_data)
     print("сделал запрос")
