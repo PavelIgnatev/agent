@@ -175,7 +175,7 @@ async def enrich_account_description(session, account_name):
         # soup = BeautifulSoup(html, "html.parser")
 
         # description_element = soup.select_one(".tgme_page_description")
-        print(description_element)
+        # print(description_element)
         # description = (
         #     description_element.get_text(strip=True) if description_element else None
         # )
