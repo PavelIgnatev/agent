@@ -163,36 +163,20 @@ async def enrich_account_description(session, account_name):
         async with session.get(f"https://t.me/{account_name}") as response:
             html = await response.text()
 
-        # soup = BeautifulSoup(html, "html.parser")
-
-        # description_element = soup.select_one(".tgme_page_description")
-        # description = (
-        #     description_element.get_text(strip=True) if description_element else None
-        # )
-
         match = re.search(
-            r'<div class="tgme_page_description">(.*?)</div>', html, re.DOTALL
-        )
-        match2 = re.search(
             r'<div class="tgme_page_description ">(.*?)</div>', html, re.DOTALL
         )
-        if match2:
-         print(match2.group(1).strip())
 
         if match:
             description = match.group(1).strip()
             print(description)
-            if "If you haveTelegram, you can" in description:
+            if description and "If you haveTelegram, you can" in description:
                 return True, description
             else:
                 return False, description
         else:
-            return False, None
+            return True, None
 
-        if description and "If you haveTelegram, you can" in description:
-            return True, description
-        else:
-            return False, description
 
     except Exception as e:
         logger.error(f"Ошибка при выполнении запроса для {account_name}: {str(e)}")
