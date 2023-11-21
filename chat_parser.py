@@ -170,11 +170,19 @@ async def enrich_account_description(session, account_name):
         #     description_element.get_text(strip=True) if description_element else None
         # )
 
-        # Используем регулярное выражение для извлечения значения из класса tgme_page_description
-        match = re.search(r'<div class="tgme_page_description">([^<]*)</div>', html)
-        description = match.group(1).strip() if match else None
-        print(description)
+        match = re.search(
+            r'<div class="tgme_page_description">(.*?)</div>', html, re.DOTALL
+        )
 
+        if match:
+            description = match.group(1).strip()
+            print(description)
+            if "If you haveTelegram, you can" in description:
+                return True, description
+            else:
+                return False, description
+        else:
+            return False, None
 
         if description and "If you haveTelegram, you can" in description:
             return True, description
