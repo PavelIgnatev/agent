@@ -12,6 +12,7 @@ import logging
 import asyncio
 from aiohttp_socks import ProxyConnector
 import re
+import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--urls", nargs="+", type=str)
@@ -144,17 +145,21 @@ def serialize_participant(participant):
     }
 
 
-def send_request_to_server(user_data):
+def send_request_to_server(user_data, retry_delay=5):
     server_url = f"http://172.17.0.1:7777/agents/{args.name}/save"
-    json = {"jsonData": user_data}
-    try:
-        response = requests.post(server_url, json=json)
-        response.raise_for_status()
-        logger.info(
-            f"Запрос успешно отправлен на сервер. Код ответа: {response.status_code}"
-        )
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Ошибка при отправке запроса на сервер: {e}")
+    json_data = {"jsonData": user_data}
+
+    while True:
+        try:
+            response = requests.post(server_url, json=json_data)
+            response.raise_for_status()
+            logger.info(
+                f"Запрос успешно отправлен на сервер. Код ответа: {response.status_code}"
+            )
+            break
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Ошибка при отправке запроса на сервер: {e}")
+            time.sleep(retry_delay)
 
 
 async def enrich_account_description(session, account_name):
@@ -168,7 +173,6 @@ async def enrich_account_description(session, account_name):
 
         if match:
             description = match.group(1).strip()
-            print(description)
             if description and "If you haveTelegram, you can" in description:
                 return True, description
             else:
