@@ -183,7 +183,6 @@ async def enrich_account_description(session, account_name):
 
 async def process_account_batch(session, account_batch, data):
     tasks = []
-    consecutive_count = 0  # Счетчик последовательных повторений фразы
     for account_name in account_batch:
         task = asyncio.create_task(enrich_account_description(session, account_name))
         tasks.append(task)
@@ -193,19 +192,14 @@ async def process_account_batch(session, account_batch, data):
     for (has_telegram_description, description), account_name in zip(
         results, account_batch
     ):
-        data["accounts"][account_name]["description"] = description
-
-        logger.info(f"Описание пользователя {account_name}: {description}")
-
         if has_telegram_description:
             logger.info(
                 f"Найдено описание пользователя с фразой 'If you haveTelegram, you can': {account_name}"
             )
-            consecutive_count += 1
-            if consecutive_count >= 10:
-                return True  # Прерывание цикла итерации аккаунтов
-        else:
-            consecutive_count = 0  # Сброс счетчика при отсутствии фразы
+            return True
+
+        data["accounts"][account_name]["description"] = description
+        logger.info(f"Описание пользователя {account_name}: {description}")
 
     return False
 
@@ -380,7 +374,6 @@ async def main(chat_urls_or_usernames):
                 logger.info(
                     "Одно или несколько описаний содержат фразу 'If you haveTelegram, you can'. "
                 )
-
             else:
                 batch_index += 1
     print("делаю запрос")
