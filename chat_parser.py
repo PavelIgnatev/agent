@@ -201,7 +201,7 @@ async def process_account_batch(session, account_batch, data):
                 f"Найдено описание пользователя с фразой 'If you haveTelegram, you can': {account_name}"
             )
             consecutive_count += 1
-            if consecutive_count >= 5:
+            if consecutive_count >= 1:
                 return True  # Прерывание цикла итерации аккаунтов
         else:
             consecutive_count = 0  # Сброс счетчика при отсутствии фразы
@@ -353,7 +353,7 @@ async def main(chat_urls_or_usernames):
 
     accounts = list(user_data["accounts"].keys())
     num_accounts = len(accounts)
-    batch_size = 25
+    batch_size = 5
     num_batches = (num_accounts + batch_size - 1) // batch_size
 
     batch_index = 0
