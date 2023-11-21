@@ -14,7 +14,6 @@ import asyncio
 from aiohttp_socks import ProxyConnector
 import re
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--urls", nargs="+", type=str)
 parser.add_argument("--name", type=str)
@@ -164,22 +163,19 @@ async def enrich_account_description(session, account_name):
         async with session.get(f"https://t.me/{account_name}") as response:
             html = await response.text()
 
-        pattern = re.compile(r'<div class="tgme_page_description">(.*?)</div>', re.DOTALL)
-        matches = pattern.search(html)
-        if matches:
-            content_inside_div = matches.group(1)
-            print(content_inside_div)
-        else:
-            print("Совпадений не найдено.")
-
         # soup = BeautifulSoup(html, "html.parser")
 
         # description_element = soup.select_one(".tgme_page_description")
-        # print(description_element)
         # description = (
         #     description_element.get_text(strip=True) if description_element else None
         # )
-        description = "pavel"
+
+        # Используем регулярное выражение для извлечения значения из класса tgme_page_description
+        match = re.search(r'<div class="tgme_page_description">([^<]*)</div>', html)
+        description = match.group(1).strip() if match else None
+        print(description)
+
+
         if description and "If you haveTelegram, you can" in description:
             return True, description
         else:
