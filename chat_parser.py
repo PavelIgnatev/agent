@@ -162,10 +162,11 @@ async def enrich_account_description(session, account_name):
     try:
         async with session.get(f"https://t.me/{account_name}") as response:
             html = await response.text()
-        print(html)
-        # soup = BeautifulSoup(html, "html.parser")
 
-        # description_element = soup.select_one(".tgme_page_description")
+        soup = BeautifulSoup(html, "html.parser")
+
+        description_element = soup.select_one(".tgme_page_description")
+        print(description_element)
         # description = (
         #     description_element.get_text(strip=True) if description_element else None
         # )
