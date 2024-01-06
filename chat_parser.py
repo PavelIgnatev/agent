@@ -23,7 +23,7 @@ args = parser.parse_args()
 api_id = args.api_id
 api_hash = args.api_hash
 session_name = f"app/{args.session_name}.session"
-
+print(api_id, api_hash, session_name)
 queryKey = [
     "а",
     "б",
