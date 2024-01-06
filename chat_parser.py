@@ -6,22 +6,26 @@ from telethon.tl.types import Channel
 import argparse
 import requests
 import string
-import aiohttp
 import random
 import logging
 import asyncio
-from aiohttp_socks import ProxyConnector
 import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--urls", nargs="+", type=str)
 parser.add_argument("--name", type=str)
+parser.add_argument("--session_name", type=str)
+parser.add_argument("--api_id", type=int)
+parser.add_argument("--api_hash", type=str)
 
 args = parser.parse_args()
 
 api_id = 21545783
 api_hash = "389839339699f6a919ac6ead583df8fa"
 session_name = "app/session.session"
+
+print(args.api_id, args.api_hash, args.session_name)
+
 queryKey = [
     "а",
     "б",
