@@ -11,7 +11,6 @@ import random
 import logging
 import asyncio
 from aiohttp_socks import ProxyConnector
-import re
 import time
 
 parser = argparse.ArgumentParser()
@@ -303,29 +302,6 @@ async def main(chat_urls_or_usernames):
     except Exception as e:
         logger.error(f"Произошла глобальная ошибка. {e}")
 
-        start_index = batch_index * batch_size
-        end_index = min(start_index + batch_size, num_accounts)
-        account_batch = accounts[start_index:end_index]
-
-        connector = ProxyConnector.from_url(
-            f"socks5://{generate_random_string(15)}:{generate_random_string(15)}@172.17.0.1:9050",
-            limit=0,
-            ssl=False,
-        )
-
-        print(batch_index, num_batches)
-
-        async with aiohttp.ClientSession(connector=connector) as session:
-            has_telegram_description = await process_account_batch(
-                session, account_batch, user_data
-            )
-
-            if has_telegram_description:
-                logger.info(
-                    "Одно или несколько описаний содержат фразу 'If you haveTelegram, you can'. "
-                )
-            else:
-                batch_index += 1
     print("делаю запрос")
     send_request_to_server(user_data)
     print("сделал запрос")
