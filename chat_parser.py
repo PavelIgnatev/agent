@@ -161,53 +161,6 @@ def send_request_to_server(user_data, retry_delay=5):
             logger.error(f"Ошибка при отправке запроса на сервер: {e}")
             time.sleep(retry_delay)
 
-
-async def enrich_account_description(session, account_name):
-    try:
-        async with session.get(f"https://t.me/{account_name}") as response:
-            html = await response.text()
-
-        match = re.search(
-            r'<div class="tgme_page_description ">(.*?)</div>', html, re.DOTALL
-        )
-
-        if match:
-            description = match.group(1).strip()
-            if description and "If you haveTelegram, you can" in description:
-                return True, description
-            else:
-                return False, description
-        else:
-            return False, None
-
-    except Exception as e:
-        logger.error(f"Ошибка при выполнении запроса для {account_name}: {str(e)}")
-        return True, None
-
-
-async def process_account_batch(session, account_batch, data):
-    tasks = []
-    for account_name in account_batch:
-        task = asyncio.create_task(enrich_account_description(session, account_name))
-        tasks.append(task)
-
-    results = await asyncio.gather(*tasks)
-
-    for (has_telegram_description, description), account_name in zip(
-        results, account_batch
-    ):
-        if has_telegram_description:
-            logger.info(
-                f"Найдено описание пользователя с фразой 'If you haveTelegram, you can': {account_name}"
-            )
-            return True
-
-        data["accounts"][account_name]["description"] = description
-        logger.info(f"Описание пользователя {account_name}: {description}")
-
-    return False
-
-
 async def main(chat_urls_or_usernames):
     user_data = {"chats": {}, "accounts": {}}
     try:
@@ -350,13 +303,6 @@ async def main(chat_urls_or_usernames):
     except Exception as e:
         logger.error(f"Произошла глобальная ошибка. {e}")
 
-    accounts = list(user_data["accounts"].keys())
-    num_accounts = len(accounts)
-    batch_size = 50
-    num_batches = (num_accounts + batch_size - 1) // batch_size
-
-    batch_index = 0
-    while batch_index < num_batches:
         start_index = batch_index * batch_size
         end_index = min(start_index + batch_size, num_accounts)
         account_batch = accounts[start_index:end_index]
